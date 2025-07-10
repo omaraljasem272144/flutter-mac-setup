@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OMC Token Overview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: #4a90e2;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      margin-top: 0;
+    }
+    .links a {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 8px 12px;
+      background: #4a90e2;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">OMC Token Overview</div>
+  </header>
+  <div class="container">
+    <div class="section">
+      <h2>Token Details</h2>
+      <p><strong>Contract Address:</strong> 0xF3eBa5258967Cd2dDd3518150571e8bAdF0167f5</p>
+      <p><strong>Network:</strong> Binance Smart Chain</p>
+      <p><strong>Description:</strong> OMC هي عملة رقمية مبنية على شبكة Binance Smart Chain تهدف إلى تعزيز التجارة اللامركزية وتسهيل عمليات الدفع بسرعة عالية وتكاليف منخفضة. تسعى OMC إلى تقديم حلول مبتكرة في عالم العملات الرقمية من خلال نظام بيئي آمن وشفاف يدعم المستخدمين والمطورين على حد سواء.</p>
+    </div>
+    <div class="section">
+      <h2>Blockchain Data</h2>
+      <p><strong>Total Supply:</strong> <span id="totalSupply">Loading...</span></p>
+      <p><strong>Holders:</strong> <span id="holders">Loading...</span></p>
+      <p><strong>Audit Status:</strong> Verified ✅</p>
+    </div>
+    <div class="section links">
+      <a href="https://bscscan.com/address/0xF3eBa5258967Cd2dDd3518150571e8bAdF0167f5" target="_blank">View on BscScan</a>
+      <a href="https://yourwebsite.com" target="_blank">Official Website</a>
+    </div>
+  </div>
+  <script>
+    const apiKey = "D49KSNZ8VD1CDP9QRCZY9IK2RKSYPU3YB4";
+    const contract = "0xF3eBa5258967Cd2dDd3518150571e8bAdF0167f5";
+
+    async function fetchTokenData() {
+      try {
+        // Get total supply
+        const supplyResponse = await fetch(`https://api.bscscan.com/api?module=stats&action=tokensupply&contractaddress=${contract}&apikey=${apiKey}`);
+        const supplyData = await supplyResponse.json();
+        const totalSupply = supplyData.result / 1e18;
+
+        document.getElementById('totalSupply').innerText = totalSupply.toLocaleString() + " OMC";
+
+        // Get holders count
+        const holdersResponse = await fetch(`https://api.bscscan.com/api?module=token&action=tokenholderlist&contractaddress=${contract}&page=1&offset=1&apikey=${apiKey}`);
+        const holdersData = await holdersResponse.json();
+
+        if (holdersData.result && holdersData.result.length > 0) {
+          document.getElementById('holders').innerText = holdersData.result[0].HolderCount + " holders";
+        } else {
+          document.getElementById('holders').innerText = "Data not available";
+        }
+
+      } catch (error) {
+        console.error(error);
+        document.getElementById('totalSupply').innerText = "Error fetching data";
+        document.getElementById('holders').innerText = "Error fetching data";
+      }
+    }
+
+    fetchTokenData();
+  </script>
+</body>
+</html>
